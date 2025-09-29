@@ -1,0 +1,6 @@
+# Python build artifacts
+__pycache__/
+
+# IDE and editor files
+.vscode/
+.idea/
