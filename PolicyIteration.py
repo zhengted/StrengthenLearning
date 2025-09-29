@@ -32,8 +32,8 @@ if __name__ == "__main__":
     start_time = time.time()
     P, R, state_idx, action_idx, terminal_states, shared, pi_extra, cfg = prepare_policy_iteration()
     v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 存stateValue
-    # q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 存q_pi(s,a) 
-    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 记录下旧的动作             
+    q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 存q_pi(s,a)
+    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 记录下旧的动作
 
     # 制定一个初始策略，所有状态采用动作stay
     for coord, s in state_idx.items():
@@ -90,10 +90,11 @@ if __name__ == "__main__":
                 next_r, next_c = clamp(next_r, next_c, cfg.maze.height, cfg.maze.width)
                 # CORRECTED: Use the just-evaluated v_table, not a stale v_old
                 val = R[s, a] + shared.gamma * v_table[next_r, next_c]
+                q_table[s, a] = val  # Store the Q-value
                 if val > v_s_max:
                     v_s_max = val
                     best_a = a
-            
+
             # Update the policy and V-value for the current state
             a_table[r, c] = best_a
             v_table[r, c] = v_s_max
@@ -116,6 +117,30 @@ if __name__ == "__main__":
     print("Final V-table (Policy Iteration):")
     for row in v_table_formatted:
         print(row)
+
+    # Format and print the final Q-table
+    q_table_formatted = [[f"{q:.2f}" for q in row] for row in q_table]
+    print("\nFinal Q-table (Policy Iteration):")
+    # Create a header for the Q-table
+    action_names_header = [name for name, idx in sorted(action_idx.items(), key=lambda item: item[1])]
+    print(f"{'State':<6} " + " ".join([f"{name:<5}" for name in action_names_header]))
+    for s, row in enumerate(q_table_formatted):
+        print(f"{s:<6} [" + " ".join([f"{val:<5}" for val in row]) + "]")
+
+
+    # Format and print the final policy (a_table)
+    action_symbols = {
+        action_idx["up"]: "↑",
+        action_idx["down"]: "↓",
+        action_idx["left"]: "←",
+        action_idx["right"]: "→",
+        action_idx["stay"]: "·",
+    }
+    policy_formatted = [[action_symbols.get(a, "?") for a in row] for row in a_table]
+    print("\nFinal Policy (Action Table):")
+    for row in policy_formatted:
+        print(" ".join(row))
+
 
     end_time = time.time()
     elapsed_time = end_time - start_time
