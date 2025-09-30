@@ -17,7 +17,7 @@ def prepare_truncated_policy_iteration(cfg_path: str = "config.json") -> Tuple:
         f"TruncatedPolicyIteration params: gamma={shared.gamma}, theta={shared.theta}, max_iter={shared.max_iterations}, trunc_k={tpi_extra.truncation_k}"
     )
     # Variable notes:
-    # P: transition probability array, shape (S, A, S), P[s,a,s'] ∈ [0,1]
+    # P: transition probability array, shape (S, A, S), P[s,a,s'] 鈭?[0,1]
     # R: immediate reward array, shape (S, A), R[s,a]
     # state_idx: mapping from (r,c) to state index s
     # action_idx: mapping from action name to index a
@@ -32,17 +32,17 @@ if __name__ == "__main__":
     start_time = time.time()
     P, R, state_idx, action_idx, terminal_states, shared, tpi_extra, cfg = prepare_truncated_policy_iteration()
 
-    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 存stateValue
-    # q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 存q_pi(s,a) 
-    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 记录下旧的动作             
+    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 瀛榮tateValue
+    # q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 瀛榪_pi(s,a) 
+    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 璁板綍涓嬫棫鐨勫姩浣?            
 
-    # 制定一个初始策略，所有状态采用动作stay
+    # 鍒跺畾涓€涓垵濮嬬瓥鐣ワ紝鎵€鏈夌姸鎬侀噰鐢ㄥ姩浣渟tay
     for coord, s in state_idx.items():
         r, c = coord[0], coord[1]
         v_table[r, c] = R[s, action_idx["stay"]] + shared.gamma * v_table[r, c]
         a_table[r, c] = action_idx["stay"]
     
-    # 针对初始策略开始迭代
+    # 閽堝鍒濆绛栫暐寮€濮嬭凯浠?
     outer_iteration_count = 0
     while True:
         outer_iteration_count += 1

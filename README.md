@@ -1,55 +1,55 @@
-# StrengthenLearning - Ç¿»¯Ñ§Ï°Ëã·¨ÊµÏÖ
+# StrengthenLearning - å¼ºåŒ–å­¦ä¹ ç®—æ³•å®žçŽ°
 
-±¾ÏîÄ¿ÊÇÓÃÓÚÑ§Ï°ºÍÊµ¼ù¾­µäÇ¿»¯Ñ§Ï°Ëã·¨µÄ¸öÈËÏîÄ¿£¬ÔÚÒ»¸ö¿ÉÅäÖÃµÄÍø¸ñÊÀ½ç£¨Grid World£©»·¾³ÖÐ£¬ÊµÏÖÁË°üÀ¨¼ÛÖµµü´ú¡¢²ßÂÔµü´úµÈ¶àÖÖËã·¨¡£
+æœ¬é¡¹ç›®æ˜¯ç”¨äºŽå­¦ä¹ å’Œå®žè·µç»å…¸å¼ºåŒ–å­¦ä¹ ç®—æ³•çš„ä¸ªäººé¡¹ç›®ï¼Œåœ¨ä¸€ä¸ªå¯é…ç½®çš„ç½‘æ ¼ä¸–ç•Œï¼ˆGrid Worldï¼‰çŽ¯å¢ƒä¸­ï¼Œå®žçŽ°äº†åŒ…æ‹¬ä»·å€¼è¿­ä»£ã€ç­–ç•¥è¿­ä»£ç­‰å¤šç§ç®—æ³•ã€‚
 
-## ºËÐÄËã·¨
+## æ ¸å¿ƒç®—æ³•
 
-±¾ÏîÄ¿µ±Ç°ÊµÏÖÁËÒÔÏÂºËÐÄµÄÇ¿»¯Ñ§Ï°Ëã·¨£º
+æœ¬é¡¹ç›®å½“å‰å®žçŽ°äº†ä»¥ä¸‹æ ¸å¿ƒçš„å¼ºåŒ–å­¦ä¹ ç®—æ³•ï¼š
 
-- **¼ÛÖµµü´ú (Value Iteration)**: Ò»¸öÍ¨¹ýµü´ú±´¶ûÂü×îÓÅ·½³ÌÀ´Ñ°ÕÒ×îÓÅ¼ÛÖµº¯Êý£¬²¢×îÖÕÍÆµ¼³ö×îÓÅ²ßÂÔµÄËã·¨¡£
-- **²ßÂÔµü´ú (Policy Iteration)**: Ò»¸öÔÚ¡°²ßÂÔÆÀ¹À¡±ºÍ¡°²ßÂÔ¸Ä½ø¡±Ö®¼ä½»Ìæ½øÐÐ£¬Ö±ÖÁ²ßÂÔÊÕÁ²µ½×îÓÅµÄËã·¨¡£
-- **½Ø¶Ï²ßÂÔµü´ú (Truncated Policy Iteration)**: ²ßÂÔµü´úµÄÒ»¸ö±äÖÖ£¬Í¨¹ýÏÞÖÆ²ßÂÔÆÀ¹À²½ÖèµÄµü´ú´ÎÊýÀ´¼ÓËÙ¼ÆËã¹ý³Ì¡£
+- **ä»·å€¼è¿­ä»£ (Value Iteration)**: ä¸€ä¸ªé€šè¿‡è¿­ä»£è´å°”æ›¼æœ€ä¼˜æ–¹ç¨‹æ¥å¯»æ‰¾æœ€ä¼˜ä»·å€¼å‡½æ•°ï¼Œå¹¶æœ€ç»ˆæŽ¨å¯¼å‡ºæœ€ä¼˜ç­–ç•¥çš„ç®—æ³•ã€‚
+- **ç­–ç•¥è¿­ä»£ (Policy Iteration)**: ä¸€ä¸ªåœ¨â€œç­–ç•¥è¯„ä¼°â€å’Œâ€œç­–ç•¥æ”¹è¿›â€ä¹‹é—´äº¤æ›¿è¿›è¡Œï¼Œç›´è‡³ç­–ç•¥æ”¶æ•›åˆ°æœ€ä¼˜çš„ç®—æ³•ã€‚
+- **æˆªæ–­ç­–ç•¥è¿­ä»£ (Truncated Policy Iteration)**: ç­–ç•¥è¿­ä»£çš„ä¸€ä¸ªå˜ç§ï¼Œé€šè¿‡é™åˆ¶ç­–ç•¥è¯„ä¼°æ­¥éª¤çš„è¿­ä»£æ¬¡æ•°æ¥åŠ é€Ÿè®¡ç®—è¿‡ç¨‹ã€‚
 
-## ÎÄ¼þ½á¹¹
+## æ–‡ä»¶ç»“æž„
 
 ```
 .
-©À©¤©¤ .editorconfig               # ±à¼­Æ÷´úÂë·ç¸ñÅäÖÃ
-©À©¤©¤ .gitignore                  # Git ºöÂÔÎÄ¼þÅäÖÃ
-©À©¤©¤ PolicyIteration.py          # ²ßÂÔµü´úËã·¨ÊµÏÖ
-©À©¤©¤ TruncatedPolicyIteration.py # ½Ø¶Ï²ßÂÔµü´úËã·¨ÊµÏÖ
-©À©¤©¤ ValueIteration.py           # ¼ÛÖµµü´úËã·¨ÊµÏÖ
-©À©¤©¤ config.json                 # ÃÔ¹¬»·¾³ºÍËã·¨²ÎÊýÅäÖÃ
-©À©¤©¤ config.py                   # ¼ÓÔØºÍ½âÎöÅäÖÃÎÄ¼þµÄ¹¤¾ß
-©À©¤©¤ maze_utils.py               # ÃÔ¹¬»·¾³ºÍMDPÊý×é¹¹½¨µÄ¸¨Öú¹¤¾ß
-©¸©¤©¤ README.md                   # ÏîÄ¿ËµÃ÷ÎÄµµ
+â”œâ”€â”€ .editorconfig               # ç¼–è¾‘å™¨ä»£ç é£Žæ ¼é…ç½®
+â”œâ”€â”€ .gitignore                  # Git å¿½ç•¥æ–‡ä»¶é…ç½®
+â”œâ”€â”€ PolicyIteration.py          # ç­–ç•¥è¿­ä»£ç®—æ³•å®žçŽ°
+â”œâ”€â”€ TruncatedPolicyIteration.py # æˆªæ–­ç­–ç•¥è¿­ä»£ç®—æ³•å®žçŽ°
+â”œâ”€â”€ ValueIteration.py           # ä»·å€¼è¿­ä»£ç®—æ³•å®žçŽ°
+â”œâ”€â”€ config.json                 # è¿·å®«çŽ¯å¢ƒå’Œç®—æ³•å‚æ•°é…ç½®
+â”œâ”€â”€ config.py                   # åŠ è½½å’Œè§£æžé…ç½®æ–‡ä»¶çš„å·¥å…·
+â”œâ”€â”€ maze_utils.py               # è¿·å®«çŽ¯å¢ƒå’ŒMDPæ•°ç»„æž„å»ºçš„è¾…åŠ©å·¥å…·
+â””â”€â”€ README.md                   # é¡¹ç›®è¯´æ˜Žæ–‡æ¡£
 ```
 
-## ÈçºÎÔËÐÐ
+## å¦‚ä½•è¿è¡Œ
 
-Äã¿ÉÒÔÖ±½ÓÔËÐÐ¶ÔÓ¦µÄ Python ÎÄ¼þÀ´Æô¶¯ÏàÓ¦µÄËã·¨¡£Ëã·¨»á¸ù¾Ý `config.json` ÖÐµÄÅäÖÃÀ´¹¹½¨ÃÔ¹¬»·¾³²¢Ö´ÐÐ¡£
+ä½ å¯ä»¥ç›´æŽ¥è¿è¡Œå¯¹åº”çš„ Python æ–‡ä»¶æ¥å¯åŠ¨ç›¸åº”çš„ç®—æ³•ã€‚ç®—æ³•ä¼šæ ¹æ® `config.json` ä¸­çš„é…ç½®æ¥æž„å»ºè¿·å®«çŽ¯å¢ƒå¹¶æ‰§è¡Œã€‚
 
 ```bash
-# ÔËÐÐ¼ÛÖµµü´ú
+# è¿è¡Œä»·å€¼è¿­ä»£
 python ValueIteration.py
 
-# ÔËÐÐ²ßÂÔµü´ú
+# è¿è¡Œç­–ç•¥è¿­ä»£
 python PolicyIteration.py
 
-# ÔËÐÐ½Ø¶Ï²ßÂÔµü´ú
+# è¿è¡Œæˆªæ–­ç­–ç•¥è¿­ä»£
 python TruncatedPolicyIteration.py
 ```
 
-Ëã·¨Ö´ÐÐÍê±Ïºó£¬½«ÔÚ¿ØÖÆÌ¨´òÓ¡³ö×îÖÕµÄ¼ÛÖµº¯Êý£¨V-table£©ºÍ¼ÆËã³öµÄ×îÓÅ²ßÂÔ¡£
+ç®—æ³•æ‰§è¡Œå®Œæ¯•åŽï¼Œå°†åœ¨æŽ§åˆ¶å°æ‰“å°å‡ºæœ€ç»ˆçš„ä»·å€¼å‡½æ•°ï¼ˆV-tableï¼‰å’Œè®¡ç®—å‡ºçš„æœ€ä¼˜ç­–ç•¥ã€‚
 
-## ÅäÖÃËµÃ÷
+## é…ç½®è¯´æ˜Ž
 
-ËùÓÐµÄ»·¾³ºÍËã·¨²ÎÊý¶¼ÔÚ `config.json` ÎÄ¼þÖÐ½øÐÐÅäÖÃ¡£
+æ‰€æœ‰çš„çŽ¯å¢ƒå’Œç®—æ³•å‚æ•°éƒ½åœ¨ `config.json` æ–‡ä»¶ä¸­è¿›è¡Œé…ç½®ã€‚
 
-- **`maze`**: ¶¨ÒåÁËÍø¸ñÊÀ½çµÄ´óÐ¡¡¢Æðµã¡¢ÖÕµãºÍÕÏ°­Îï¡£
+- **`maze`**: å®šä¹‰äº†ç½‘æ ¼ä¸–ç•Œçš„å¤§å°ã€èµ·ç‚¹ã€ç»ˆç‚¹å’Œéšœç¢ç‰©ã€‚
 - **`algorithms`**:
-    - **`shared`**: ¶¨ÒåÁËËùÓÐËã·¨¹²ÏíµÄ²ÎÊý£¬ÈçÕÛ¿ÛÒò×Ó `gamma`¡¢ÊÕÁ²ãÐÖµ `theta` ºÍ×î´óµü´ú´ÎÊý `max_iterations`¡£
-    - **`policy_iteration`**: Îª²ßÂÔµü´ú¶¨ÒåµÄÌØ¶¨²ÎÊý£¬Èç²ßÂÔÆÀ¹À½×¶ÎµÄ×î´óµü´ú´ÎÊý¡£
-    - **`truncated_policy_iteration`**: Îª½Ø¶Ï²ßÂÔµü´ú¶¨ÒåµÄÌØ¶¨²ÎÊý£¬Èç½Ø¶ÏµÄµü´ú´ÎÊý `truncation_k`¡£
+    - **`shared`**: å®šä¹‰äº†æ‰€æœ‰ç®—æ³•å…±äº«çš„å‚æ•°ï¼Œå¦‚æŠ˜æ‰£å› å­ `gamma`ã€æ”¶æ•›é˜ˆå€¼ `theta` å’Œæœ€å¤§è¿­ä»£æ¬¡æ•° `max_iterations`ã€‚
+    - **`policy_iteration`**: ä¸ºç­–ç•¥è¿­ä»£å®šä¹‰çš„ç‰¹å®šå‚æ•°ï¼Œå¦‚ç­–ç•¥è¯„ä¼°é˜¶æ®µçš„æœ€å¤§è¿­ä»£æ¬¡æ•°ã€‚
+    - **`truncated_policy_iteration`**: ä¸ºæˆªæ–­ç­–ç•¥è¿­ä»£å®šä¹‰çš„ç‰¹å®šå‚æ•°ï¼Œå¦‚æˆªæ–­çš„è¿­ä»£æ¬¡æ•° `truncation_k`ã€‚
 
-Äã¿ÉÒÔÍ¨¹ýÐÞ¸Ä´ËÎÄ¼þÀ´²âÊÔËã·¨ÔÚ²»Í¬»·¾³ºÍ²ÎÊýÏÂµÄ±íÏÖ¡£
+ä½ å¯ä»¥é€šè¿‡ä¿®æ”¹æ­¤æ–‡ä»¶æ¥æµ‹è¯•ç®—æ³•åœ¨ä¸åŒçŽ¯å¢ƒå’Œå‚æ•°ä¸‹çš„è¡¨çŽ°ã€‚

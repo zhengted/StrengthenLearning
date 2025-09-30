@@ -19,7 +19,7 @@ def prepare_value_iteration(cfg_path: str = "config.json") -> Tuple:
         f"ValueIteration params: gamma={shared.gamma}, theta={shared.theta}, max_iter={shared.max_iterations}"
     )
     # Variable notes:
-    # P: transition probability array, shape (S, A, S), P[s,a,s'] ¡Ê [0,1]
+    # P: transition probability array, shape (S, A, S), P[s,a,s'] âˆˆ [0,1]
     # R: immediate reward array, shape (S, A), R[s,a]
     # state_idx: mapping from (r,c) to state index s
     # action_idx: mapping from action name to index a
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     import time
 
     start_time = time.time()
-    # ¶ÁÅäÖÃ
+    # è¯»é…ç½®
     P, R, state_idx, action_idx, terminal_states, shared, cfg = prepare_value_iteration()
 
     # q_table stores action values v(s,a)
@@ -51,9 +51,9 @@ if __name__ == "__main__":
     q_table[terminal_states, 4] = R[terminal_states,4] + gamma / (1 - gamma)
     v_table[terminal_states] = R[terminal_states,4] + gamma / (1 - gamma)
 
-    # ±éÀú×´Ì¬
+    # éå†çŠ¶æ€
     # Precompute terminal set to avoid ambiguous ndarray equality
-    # Õâ¸ö×÷ÓÃ¾ÍÊÇ°ÑÖÕµãËùÔÚµÄË÷Òı·Å½øÒ»¸ösetÖĞ
+    # è¿™ä¸ªä½œç”¨å°±æ˜¯æŠŠç»ˆç‚¹æ‰€åœ¨çš„ç´¢å¼•æ”¾è¿›ä¸€ä¸ªsetä¸­
     terminal_set = set(int(x) for x in terminal_states.flatten() if hasattr(terminal_states, "flatten")) if hasattr(terminal_states, "__iter__") else {int(terminal_states)}
 
     iteration_count = 0
