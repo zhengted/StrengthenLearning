@@ -36,38 +36,21 @@ if __name__ == "__main__":
     v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 存stateValue
     q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 存q_pi(s,a)
     a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 记录下旧的动作
-
-    # 制定一个初始策略，所有状态采用动作stay
-    for coord, s in state_idx.items():
-        r, c = coord[0], coord[1]
-        v_table[r, c] = R[s, action_idx["stay"]] + shared.gamma * v_table[r, c]
-        a_table[r, c] = action_idx["stay"]
     
     # 针对初始策略开始迭代
     outer_iteration_count = 0
     while True:
         outer_iteration_count += 1
-
+        
         # PE MC_Basic Evaluation: Iterate until V-function for the current MC_Basic converges
         action_names = {i: name for name, i in action_idx.items()}
         for eval_iter in range(pi_extra.evaluation_max_iterations):
             delta = 0
             v_old_for_eval = v_table.copy()
-
             for coord, s in state_idx.items():
                 r, c = coord[0], coord[1]
                 action_values = []
-                for name, a in action_idx.items():
-                    dr, dc = ACTION_DELTAS_DEFAULT[name]
-                    next_r, next_c = r + dr, c + dc
-                    next_r, next_c = clamp(next_r, next_c, cfg.maze.height, cfg.maze.width)
-                    val = R[s, a] + shared.gamma * v_old_for_eval[next_r, next_c]
-                    action_values.append(val)
-                v_table[r, c] = sum(action_values) / len(action_values)
-
-            # Check for convergence
-            if delta < shared.theta:
-                break
+                
 
         # PI MC_Basic Improvement: Greedily update MC_Basic and check for stability
         MC_Basic_stable = True

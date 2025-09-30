@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
 import json
+import MC_Basic
 from maze_utils import build_action_deltas, clamp
 
 
@@ -34,12 +35,16 @@ class AlgoPolicyIterationExtra:
 class AlgoTruncatedPolicyIterationExtra:
     truncation_k: int
 
+@dataclass
+class AlgoMCBasicExtra:
+    episode_length: int
 
 @dataclass
 class Algorithms:
     shared: AlgoShared
     policy_iteration: AlgoPolicyIterationExtra
     truncated_policy_iteration: AlgoTruncatedPolicyIterationExtra
+    mc_basic: AlgoMCBasicExtra
 
 
 @dataclass
@@ -87,10 +92,13 @@ def load_config(path: str = "config.json") -> RootConfig:
     tpi_extra = AlgoTruncatedPolicyIterationExtra(
         truncation_k=int(algo_data["truncated_policy_iteration"]["truncation_k"]),
     )
+    mc_basic_extra = AlgoMCBasicExtra(
+        episode_length=int(algo_data["mc_basic"]["episode_length"]),
+    )
 
     return RootConfig(
         maze=maze,
-        algorithms=Algorithms(shared=shared, policy_iteration=pi_extra, truncated_policy_iteration=tpi_extra),
+        algorithms=Algorithms(shared=shared, policy_iteration=pi_extra, truncated_policy_iteration=tpi_extra, mc_basic=mc_basic_extra),
     )
 
 

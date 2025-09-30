@@ -13,6 +13,7 @@
     "theta": 1e-6,
     "max_iterations": 1000,
     "policy_iteration": {"evaluation_max_iterations": 100},
-    "truncated_policy_iteration": {"truncation_k": 10}
+    "truncated_policy_iteration": {"truncation_k": 10},
+    "mc_basic": {"episode_length": 1}
   }
 }
