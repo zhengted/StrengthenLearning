@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
 import json
-import MC_Basic
 from maze_utils import build_action_deltas, clamp
 
 
