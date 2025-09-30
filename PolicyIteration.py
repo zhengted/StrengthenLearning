@@ -51,7 +51,8 @@ if __name__ == "__main__":
         for eval_iter in range(pi_extra.evaluation_max_iterations):
             delta = 0
             v_old_for_eval = v_table.copy()
-
+            print(f"current iteration count: {eval_iter}")
+            print(v_table)
             for coord, s in state_idx.items():
                 r, c = coord[0], coord[1]
 
@@ -111,7 +112,8 @@ if __name__ == "__main__":
         if outer_iteration_count >= shared.max_iterations:
             print(f"Max iterations ({shared.max_iterations}) reached, breaking loop.")
             break
-
+        print(f"After Policy Improvement {outer_iteration_count}:")
+        print(v_table)
     # Format and print the final V-table
     v_table_formatted = [[f"{v:.2f}" for v in row] for row in v_table]
     print("Final V-table (Policy Iteration):")
