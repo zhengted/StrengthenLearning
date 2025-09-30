@@ -17,7 +17,7 @@ def prepare_policy_iteration(cfg_path: str = "config.json") -> Tuple:
         f"PolicyIteration params: gamma={shared.gamma}, theta={shared.theta}, max_iter={shared.max_iterations}, eval_max_iter={pi_extra.evaluation_max_iterations}"
     )
     # Variable notes:
-    # P: transition probability array, shape (S, A, S), P[s,a,s'] ¡Ê [0,1]
+    # P: transition probability array, shape (S, A, S), P[s,a,s'] âˆˆ [0,1]
     # R: immediate reward array, shape (S, A), R[s,a]
     # state_idx: mapping from (r,c) to state index s
     # action_idx: mapping from action name to index a
@@ -31,17 +31,17 @@ if __name__ == "__main__":
     import time
     start_time = time.time()
     P, R, state_idx, action_idx, terminal_states, shared, pi_extra, cfg = prepare_policy_iteration()
-    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 ´æstateValue
-    q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 ´æq_pi(s,a)
-    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 ¼ÇÂ¼ÏÂ¾ÉµÄ¶¯×÷
+    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 å­˜stateValue
+    q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 å­˜q_pi(s,a)
+    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 è®°å½•ä¸‹æ—§çš„åŠ¨ä½œ
 
-    # ÖÆ¶¨Ò»¸ö³õÊ¼²ßÂÔ£¬ËùÓĞ×´Ì¬²ÉÓÃ¶¯×÷stay
+    # åˆ¶å®šä¸€ä¸ªåˆå§‹ç­–ç•¥ï¼Œæ‰€æœ‰çŠ¶æ€é‡‡ç”¨åŠ¨ä½œstay
     for coord, s in state_idx.items():
         r, c = coord[0], coord[1]
         v_table[r, c] = R[s, action_idx["stay"]] + shared.gamma * v_table[r, c]
         a_table[r, c] = action_idx["stay"]
     
-    # Õë¶Ô³õÊ¼²ßÂÔ¿ªÊ¼µü´ú
+    # é’ˆå¯¹åˆå§‹ç­–ç•¥å¼€å§‹è¿­ä»£
     outer_iteration_count = 0
     while True:
         outer_iteration_count += 1
@@ -132,11 +132,11 @@ if __name__ == "__main__":
 
     # Format and print the final policy (a_table)
     action_symbols = {
-        action_idx["up"]: "¡ü",
-        action_idx["down"]: "¡ı",
-        action_idx["left"]: "¡û",
-        action_idx["right"]: "¡ú",
-        action_idx["stay"]: "¡¤",
+        action_idx["up"]: "â†‘",
+        action_idx["down"]: "â†“",
+        action_idx["left"]: "â†",
+        action_idx["right"]: "â†’",
+        action_idx["stay"]: "ãƒ»",
     }
     policy_formatted = [[action_symbols.get(a, "?") for a in row] for row in a_table]
     print("\nFinal Policy (Action Table):")
