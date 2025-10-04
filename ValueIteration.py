@@ -29,6 +29,28 @@ def prepare_value_iteration(cfg_path: str = "config.json") -> Tuple:
     return P, R, state_idx, action_idx, terminal_states, shared, cfg
         
 
+def build_value_and_action_grids(v_table, q_table, action_idx, cfg, terminal_set=None):
+    H = cfg.maze.height
+    W = cfg.maze.width
+    v_grid = [[float(v_table[r * W + c]) for c in range(W)] for r in range(H)]
+    print(f"\nV ({H}x{W}):")
+    for row in v_grid:
+        print([f"{val:.2f}" for val in row])
+
+    idx_to_action = {idx: name for name, idx in action_idx.items()}
+    actions_grid = [[None for _ in range(W)] for _ in range(H)]
+    for s in range(H * W):
+        r, c = divmod(s, W)
+        row = q_table[s]
+        if terminal_set is not None and s in terminal_set:
+            actions_grid[r][c] = "-"
+            continue
+        best_a = max(range(len(row)), key=lambda a: row[a])
+        actions_grid[r][c] = idx_to_action.get(best_a, str(best_a))
+
+    return H, W, v_grid, actions_grid
+
+
 if __name__ == "__main__":
     import numpy as np
     import time
@@ -48,8 +70,6 @@ if __name__ == "__main__":
 
     # For terminal states, compute V(s) with 'stay' action
     gamma = shared.gamma
-    q_table[terminal_states, 4] = R[terminal_states,4] + gamma / (1 - gamma)
-    v_table[terminal_states] = R[terminal_states,4] + gamma / (1 - gamma)
 
     # 遍历状态
     # Precompute terminal set to avoid ambiguous ndarray equality
@@ -61,10 +81,6 @@ if __name__ == "__main__":
         iteration_count += 1
         delta = 0.0
         for coord, s in state_idx.items():
-            # Skip terminal states
-            if s in terminal_set:
-                # keep terminal value as is (commonly 0 or predefined)
-                continue
 
             v_s_max = float('-inf')
             best_a = None
@@ -93,32 +109,11 @@ if __name__ == "__main__":
         if delta < getattr(shared, "theta", 0.0):
             print(f"Value Iteration Stop, spend {iteration_count} count")
             break
-    
-    # print(v_table)
-    # Reshape v_table to HxW grid and print
-    H = cfg.maze.height
-    W = cfg.maze.width
-    v_grid = [[float(v_table[r * W + c]) for c in range(W)] for r in range(H)]
-    print(f"\nV ({H}x{W}):")
-    for row in v_grid:
-        print([f"{val:.2f}" for val in row])
+        print(f"current iteration count : {iteration_count}")
+        build_value_and_action_grids(v_table, q_table, action_idx, cfg, terminal_set)
 
-    # Map nonzero Q entries to action names and print as HxW grid
-    idx_to_action = {idx: name for name, idx in action_idx.items()}
-    actions_grid = [[None for _ in range(W)] for _ in range(H)]
-    for s in range(H * W):
-        r, c = divmod(s, W)
-        row = q_table[s]
-        # show only the optimal action per state; mark terminal with '-'
-        try:
-            if s in terminal_set:
-                actions_grid[r][c] = "-"
-                continue
-        except NameError:
-            # if terminal_set is not in scope, default to showing optimal
-            pass
-        best_a = max(range(len(row)), key=lambda a: row[a])
-        actions_grid[r][c] = idx_to_action.get(best_a, str(best_a))
+    # print(v_table)
+    H, W, v_grid, actions_grid = build_value_and_action_grids(v_table, q_table, action_idx, cfg, terminal_set)
     print(f"\nActions (optimal per state, {H}x{W}):")
     for r in range(H):
         print([actions_grid[r][c] for c in range(W)])

@@ -41,40 +41,42 @@ if __name__ == "__main__":
         v_table[r, c] = R[s, action_idx["stay"]] + shared.gamma * v_table[r, c]
         a_table[r, c] = action_idx["stay"]
     
+    # PE Policy Evaluation: Iterate until V-function for the current policy converges
+    # PE循环是可以提出来的 和 PI循环分离 可以降低一点复杂度
+    action_names = {i: name for name, i in action_idx.items()}
+
+    for eval_iter in range(pi_extra.evaluation_max_iterations):
+        delta = 0
+        v_old_for_eval = v_table.copy()
+        print(f"current iteration count: {eval_iter}")
+        print(v_table)
+        for coord, s in state_idx.items():
+            r, c = coord[0], coord[1]
+
+            # Get action from the fixed policy
+            action_idx_current = a_table[r, c]
+            # Skip terminal states if they have a policy assigned
+            if action_idx_current == -1: continue
+            action_name = action_names[action_idx_current]
+
+            # Find next state
+            dr, dc = ACTION_DELTAS_DEFAULT[action_name]
+            next_r, next_c = clamp(r + dr, c + dc, cfg.maze.height, cfg.maze.width)
+
+            # Correct Bellman expectation update using values from the previous sweep
+            new_v = R[s, action_idx_current] + shared.gamma * v_old_for_eval[next_r, next_c]
+
+            delta = max(delta, abs(new_v - v_old_for_eval[r, c]))
+            v_table[r, c] = new_v
+
+        # Check for convergence
+        if delta < shared.theta:
+            break
+
     # 针对初始策略开始迭代
     outer_iteration_count = 0
     while True:
         outer_iteration_count += 1
-
-        # PE Policy Evaluation: Iterate until V-function for the current policy converges
-        action_names = {i: name for name, i in action_idx.items()}
-        for eval_iter in range(pi_extra.evaluation_max_iterations):
-            delta = 0
-            v_old_for_eval = v_table.copy()
-            print(f"current iteration count: {eval_iter}")
-            print(v_table)
-            for coord, s in state_idx.items():
-                r, c = coord[0], coord[1]
-
-                # Get action from the fixed policy
-                action_idx_current = a_table[r, c]
-                # Skip terminal states if they have a policy assigned
-                if action_idx_current == -1: continue
-                action_name = action_names[action_idx_current]
-
-                # Find next state
-                dr, dc = ACTION_DELTAS_DEFAULT[action_name]
-                next_r, next_c = clamp(r + dr, c + dc, cfg.maze.height, cfg.maze.width)
-
-                # Correct Bellman expectation update using values from the previous sweep
-                new_v = R[s, action_idx_current] + shared.gamma * v_old_for_eval[next_r, next_c]
-
-                delta = max(delta, abs(new_v - v_old_for_eval[r, c]))
-                v_table[r, c] = new_v
-
-            # Check for convergence
-            if delta < shared.theta:
-                break
 
         # PI Policy Improvement: Greedily update policy and check for stability
         policy_stable = True
