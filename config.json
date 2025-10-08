@@ -4,7 +4,7 @@
     "height": 5,
     "forbidden": [[1,1],[1,2],[2,2],[3,1],[3,3],[4,1]],
     "targets": [[3,2]],
-    "rewards": {"other": 0, "forbidden": -10, "target": 1},
+    "rewards": {"other": 0, "forbidden": -10, "target": 1, "reward_border": -10},
     "actions": ["up", "down", "left", "right", "stay"],
     "terminal_absorbing": true
   },
@@ -12,8 +12,8 @@
     "gamma": 0.9,
     "theta": 1e-6,
     "max_iterations": 100,
-    "policy_iteration": {"evaluation_max_iterations": 1000},
+    "policy_iteration": {"evaluation_max_iterations": 10000},
     "truncated_policy_iteration": {"truncation_k": 10},
-    "mc_basic": {"episode_length": 2}
+    "mc_basic": {"episode_length": 100}
   }
 }

@@ -13,7 +13,7 @@ class MazeConfig:
     height: int
     forbidden: List[Tuple[int, int]]
     targets: List[Tuple[int, int]]
-    rewards: Dict[str, float]  # keys: other, forbidden, target
+    rewards: Dict[str, float]  # keys: other, forbidden, target, reward_border(optional)
     actions: Optional[List[str]] = None  # default: [up, down, left, right, stay]
     terminal_absorbing: bool = True  # whether target is absorbing state
 
@@ -74,6 +74,8 @@ def load_config(path: str = "config.json") -> RootConfig:
             "other": float(maze_data["rewards"]["other"]),
             "forbidden": float(maze_data["rewards"]["forbidden"]),
             "target": float(maze_data["rewards"]["target"]),
+            # optional new key; default to 0.0 if not provided
+            "reward_border": float(maze_data["rewards"].get("reward_border", 0.0)),
         },
         actions=maze_data.get("actions") or ["up", "down", "left", "right", "stay"],
         terminal_absorbing=bool(maze_data.get("terminal_absorbing", True)),
@@ -147,11 +149,17 @@ def build_maze_mdp_arrays(maze: MazeConfig) -> Tuple["np.ndarray", "np.ndarray",
                 continue
 
             dr, dc = delta[a]
-            nr, nc = clamp(coord[0] + dr, coord[1] + dc, H, W)
+            # compute intended next position before clamping
+            ir, ic = coord[0] + dr, coord[1] + dc
+            nr, nc = clamp(ir, ic, H, W)
             next_coord = (nr, nc)
             spi = state_idx[next_coord]
 
             P[si, ai, spi] = 1.0
-            R[si, ai] = maze.rewards[cell_type[next_coord]]
+            # border move penalty: if clamping changed the intended coord, apply reward_border
+            if (ir, ic) != (nr, nc):
+                R[si, ai] = maze.rewards.get("reward_border", 0.0)
+            else:
+                R[si, ai] = maze.rewards[cell_type[next_coord]]
 
     return P, R, state_idx, action_idx, terminal_states

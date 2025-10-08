@@ -73,16 +73,18 @@ if __name__ == "__main__":
     idx_to_coord = {s: coord for coord, s in state_idx.items()}
     # v_old_for_eval = v_table.copy()
 
+
     # 针对每个s
     for coord, s in state_idx.items():
         r, c = coord[0], coord[1]
         cur_r, cur_c = r, c
+        
         # 针对每个s下的每个a
         for name, a in action_idx.items():
             ar, ac = idx_to_delta(a)
             action_dir_r, action_dir_c = clamp(cur_r + ar, cur_c + ac, cfg.maze.height, cfg.maze.width)
             # 当前s下执行a得到的价值 q_table的初值
-           
+            test_count = [0,0,0,0,0]
             # 迭代若干步
             for eval_iter in range(pi_extra.evaluation_max_iterations):
                 episode_length = cfg.algorithms.mc_basic.episode_length - 1
@@ -102,16 +104,21 @@ if __name__ == "__main__":
                 temp = 0
                 current_r, current_c = r, c
                 current_s = s
+               
                 for idx, action in enumerate(episodes):
                     episode_r, episode_c = idx_to_delta(action)
                     current_r, current_c = clamp(current_r + episode_r, current_c + episode_c, cfg.maze.height, cfg.maze.width)
-                    
                     temp += (gamma ** idx) * R[current_s, action]
-                    current_s = state_idx[current_r, current_c]
-
+                    if not (current_s in terminal_states):
+                        current_s = state_idx[current_r, current_c]
+                # if s == 23 and a == 3:
+                #     test_count[episodes[1]] += 1
+                #     if temp > 0:
+                #         print(f"temp={temp} episodes={episodes}")
                 q_table[s, a] += temp / (pi_extra.evaluation_max_iterations)
-
-    
+            # if s == 23 and a == 3:
+            #     print(f"test_count:{test_count}")    
+            #     print(f"q[s,a]={q_table[s,a]}")
     print("After PE")
      # Format and print the final Q-table
     q_table_formatted = [[f"{q:.2f}" for q in row] for row in q_table]
