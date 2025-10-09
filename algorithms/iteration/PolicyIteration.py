@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 from typing import Tuple
 
 import numpy as np
 
-from config import load_config, build_maze_mdp_arrays
-from maze_utils import ACTION_DELTAS_DEFAULT, clamp
+from core.config import load_config, build_maze_mdp_arrays
+from core.maze_utils import ACTION_DELTAS_DEFAULT, clamp
 
 
 def prepare_policy_iteration(cfg_path: str = "config.json") -> Tuple:

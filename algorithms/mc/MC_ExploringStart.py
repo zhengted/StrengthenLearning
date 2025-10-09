@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 from math import gamma
 from typing import Tuple
 
 import numpy as np
 
-from config import load_config, build_maze_mdp_arrays
-from maze_utils import ACTION_DELTAS_DEFAULT, clamp
+from core.config import load_config, build_maze_mdp_arrays
+from core.maze_utils import ACTION_DELTAS_DEFAULT, clamp
 import os
 
 
@@ -22,7 +26,9 @@ def action_to_idx(name: str) -> int:
     except ValueError:
         raise ValueError(f"unknown action {name}")
 
-def idx_to_delta(idx: int) -> tuple[int, int]:
+from typing import Tuple
+
+def idx_to_delta(idx: int) -> Tuple[int, int]:
     return ACTION_DELTAS_DEFAULT[idx_to_action(idx)]
 
 def prepare_MC_Basic_iteration(cfg_path: str = "config.json") -> Tuple:
@@ -73,7 +79,6 @@ if __name__ == "__main__":
     idx_to_coord = {s: coord for coord, s in state_idx.items()}
     # v_old_for_eval = v_table.copy()
 
-
     # 针对每个s
     for coord, s in state_idx.items():
         r, c = coord[0], coord[1]
@@ -84,7 +89,6 @@ if __name__ == "__main__":
             ar, ac = idx_to_delta(a)
             action_dir_r, action_dir_c = clamp(cur_r + ar, cur_c + ac, cfg.maze.height, cfg.maze.width)
             # 当前s下执行a得到的价值 q_table的初值
-            test_count = [0,0,0,0,0]
             # 迭代若干步
             for eval_iter in range(pi_extra.evaluation_max_iterations):
                 episode_length = cfg.algorithms.mc_basic.episode_length - 1
@@ -111,14 +115,7 @@ if __name__ == "__main__":
                     temp += (gamma ** idx) * R[current_s, action]
                     if not (current_s in terminal_states):
                         current_s = state_idx[current_r, current_c]
-                # if s == 23 and a == 3:
-                #     test_count[episodes[1]] += 1
-                #     if temp > 0:
-                #         print(f"temp={temp} episodes={episodes}")
                 q_table[s, a] += temp / (pi_extra.evaluation_max_iterations)
-            # if s == 23 and a == 3:
-            #     print(f"test_count:{test_count}")    
-            #     print(f"q[s,a]={q_table[s,a]}")
     print("After PE")
      # Format and print the final Q-table
     q_table_formatted = [[f"{q:.2f}" for q in row] for row in q_table]
@@ -183,11 +180,11 @@ if __name__ == "__main__":
 
     # Format and print the final MC_Basic (a_table)
     action_symbols = {
-        action_idx["up"]: "↑",
-        action_idx["down"]: "↓",
-        action_idx["left"]: "←",
-        action_idx["right"]: "→",
-        action_idx["stay"]: "・",
+        action_idx["up"]: "\u2191",
+        action_idx["down"]: "\u2193",
+        action_idx["left"]: "\u2190",
+        action_idx["right"]: "\u2192",
+        action_idx["stay"]: ".",
     }
     MC_Basic_formatted = [[action_symbols.get(a, "?") for a in row] for row in a_table]
     print("\nFinal MC_Basic (Action Table):")

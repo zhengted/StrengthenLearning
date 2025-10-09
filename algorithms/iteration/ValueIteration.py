@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 from pydoc import doc
 from typing import Tuple
 from dataclasses import asdict
@@ -6,8 +10,8 @@ import json
 
 from numpy import dtype, int32
 
-from config import load_config, build_maze_mdp_arrays
-from maze_utils import ACTION_DELTAS_DEFAULT, clamp
+from core.config import load_config, build_maze_mdp_arrays
+from core.maze_utils import ACTION_DELTAS_DEFAULT, clamp
 
 
 def prepare_value_iteration(cfg_path: str = "config.json") -> Tuple:
@@ -19,7 +23,7 @@ def prepare_value_iteration(cfg_path: str = "config.json") -> Tuple:
         f"ValueIteration params: gamma={shared.gamma}, theta={shared.theta}, max_iter={shared.max_iterations}"
     )
     # Variable notes:
-    # P: transition probability array, shape (S, A, S), P[s,a,s'] âˆˆ [0,1]
+    # P: transition probability array, shape (S, A, S), P[s,a,s'] ¡Ê [0,1]
     # R: immediate reward array, shape (S, A), R[s,a]
     # state_idx: mapping from (r,c) to state index s
     # action_idx: mapping from action name to index a
@@ -56,7 +60,7 @@ if __name__ == "__main__":
     import time
 
     start_time = time.time()
-    # è¯»é…ç½®
+    # ¶ÁÅäÖÃ
     P, R, state_idx, action_idx, terminal_states, shared, cfg = prepare_value_iteration()
 
     # q_table stores action values v(s,a)
@@ -71,9 +75,9 @@ if __name__ == "__main__":
     # For terminal states, compute V(s) with 'stay' action
     gamma = shared.gamma
 
-    # éå†çŠ¶æ€
+    # ±éÀú×´Ì¬
     # Precompute terminal set to avoid ambiguous ndarray equality
-    # è¿™ä¸ªä½œç”¨å°±æ˜¯æŠŠç»ˆç‚¹æ‰€åœ¨çš„ç´¢å¼•æ”¾è¿›ä¸€ä¸ªsetä¸­
+    # Õâ¸ö×÷ÓÃ¾ÍÊÇ°ÑÖÕµãËùÔÚµÄË÷Òı·Å½øÒ»¸ösetÖĞ
     terminal_set = set(int(x) for x in terminal_states.flatten() if hasattr(terminal_states, "flatten")) if hasattr(terminal_states, "__iter__") else {int(terminal_states)}
 
     iteration_count = 0

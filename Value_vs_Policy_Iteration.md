@@ -1,15 +1,15 @@
-好的，当然。我们来以您项目中的迷宫为例，深入地讲解一下 **策略迭代 (Policy Iteration)** 和 **价值迭代 (Value Iteration)**。
+本文以本项目的网格迷宫为例，系统说明 **策略迭代 (Policy Iteration)** 与 **价值迭代 (Value Iteration)** 的原理、差异与在当前仓库中的运行方式与示例。
 
 这两种算法都属于**有模型 (Model-Based)** 的动态规划方法。这意味着它们在开始计算之前，就已经**完全掌握了环境的所有规则**。在您的项目中，这个“模型”具体指：
 
 1.  **状态转移概率 `P`**：对于任何一个格子 `s`，采取任何一个动作 `a` 后，会移动到哪个格子 `s'` 的概率。在您这个确定的迷-宫里，这个概率总是 100%（比如在 `(r, c)` 选择 'up'，就一定会到 `(r-1, c)`）。
 2.  **奖励函数 `R`**：在任何一个格子 `s`，采取动作 `a` 后能获得的即时奖励。
 
-这两个信息都是在 `config.py` 的 `build_maze_mdp_arrays` 函数中被计算出来，并提供给算法使用的。
+这两个信息由 `core/config.py` 的 `build_maze_mdp_arrays` 构建，并在各算法脚本中使用。
 
 ---
 
-### 策略迭代 (Policy Iteration) - `PolicyIteration.py`
+### 策略迭代 (Policy Iteration) - `algorithms/iteration/PolicyIteration.py`
 
 策略迭代就像一个“谋定而后动”的棋手，它的过程分为两步，并不断循环这两步，直到找到最优策略。
 
@@ -49,7 +49,7 @@
 
 ---
 
-### 价值迭代 (Value Iteration) - `ValueIteration.py`
+### 价值迭代 (Value Iteration) - `algorithms/iteration/ValueIteration.py`
 
 价值迭代则像一个更“急功近利”的棋手，它试图一步到位，直接找到最优价值。
 
@@ -89,3 +89,49 @@
 | **最终产物** | 在循环中同时得到最优价值和最优策略。 | 循环结束得到最优价值，再用一步提取出最优策略。 |
 
 对于您这个小规模的迷宫来说，两种算法的性能差异微乎其微，但它们代表了动态规划求解强化学习问题的两种经典思路。
+
+---
+
+## 项目结构与运行
+
+- 目录结构（节选）：
+  - `algorithms/iteration/PolicyIteration.py`
+  - `algorithms/iteration/ValueIteration.py`
+  - `algorithms/iteration/TruncatedPolicyIteration.py`
+  - `core/config.py`、`core/config.json`、`core/maze_utils.py`
+
+- 推荐运行（模块方式）：
+  - `python -m algorithms.iteration.PolicyIteration`
+  - `python -m algorithms.iteration.ValueIteration`
+
+- 直接脚本运行（脚本内已注入项目根到 `sys.path`）：
+  - `python algorithms/iteration/PolicyIteration.py`
+  - `python algorithms/iteration/ValueIteration.py`
+
+- 配置加载：
+  - 默认从 `core/config.json` 加载；`load_config()` 支持传入相对 `core/` 的路径或绝对路径。
+
+## 示例输出（节选）
+
+- 价值迭代最终 V 表：
+  - `['3.49', '3.87', '4.30', '4.78', '5.31']`
+  - `['3.14', '3.49', '4.78', '5.31', '5.90']`
+  - `['2.82', '2.54', '10.00', '5.90', '6.56']`
+  - `['2.54', '10.00', '10.00', '10.00', '7.29']`
+  - `['2.29', '9.00', '10.00', '9.00', '8.10']`
+
+- 策略迭代最终动作（示例）：
+  - `['right', 'right', 'right', 'down', 'down']`
+  - `['up', 'up', 'right', 'down', 'down']`
+  - `['up', 'left', 'down', 'right', 'down']`
+  - `['up', 'right', '-', 'left', 'down']`
+  - `['up', 'right', 'up', 'left', 'left']`
+
+## 常见问题
+
+- `ModuleNotFoundError: No module named 'core'`
+  - 模块方式运行可避免；脚本方式已在文件顶部注入 `sys.path` 根路径，或在 Notebook 中执行：
+    - `import sys; sys.path.insert(0, r'E:\Algorithm\MyStrengthenLearning')`
+
+- UTF-8 编码报错（例如箭头字符）
+  - 已统一使用 Unicode 转义（`\u2191`、`\u2193`、`\u2190`、`\u2192`）；确保编辑器默认以 UTF-8 打开。

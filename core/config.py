@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
+import os
 
 import json
-from maze_utils import build_action_deltas, clamp
+from .maze_utils import build_action_deltas, clamp
 
 
 # Maze-shaped MDP configuration
@@ -61,8 +62,15 @@ def _load_file(path: str) -> dict:
     raise ValueError(f"Unsupported config format (expect .json): {path}")
 
 
-def load_config(path: str = "config.json") -> RootConfig:
-    data = _load_file(path)
+def load_config(path: Optional[str] = None) -> RootConfig:
+    # Resolve default config path to core/config.json
+    base_dir = os.path.dirname(__file__)
+    if path is None:
+        resolved = os.path.join(base_dir, "config.json")
+    else:
+        resolved = path if os.path.isabs(path) else os.path.join(base_dir, path)
+
+    data = _load_file(resolved)
 
     maze_data = data["maze"]
     maze = MazeConfig(

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 from typing import Tuple
 
 import numpy as np
 
-from config import load_config, build_maze_mdp_arrays
-from maze_utils import ACTION_DELTAS_DEFAULT, clamp
+from core.config import load_config, build_maze_mdp_arrays
+from core.maze_utils import ACTION_DELTAS_DEFAULT, clamp
 
 
 def prepare_truncated_policy_iteration(cfg_path: str = "config.json") -> Tuple:
@@ -17,7 +21,7 @@ def prepare_truncated_policy_iteration(cfg_path: str = "config.json") -> Tuple:
         f"TruncatedPolicyIteration params: gamma={shared.gamma}, theta={shared.theta}, max_iter={shared.max_iterations}, trunc_k={tpi_extra.truncation_k}"
     )
     # Variable notes:
-    # P: transition probability array, shape (S, A, S), P[s,a,s'] âˆˆ [0,1]
+    # P: transition probability array, shape (S, A, S), P[s,a,s'] ¡Ê [0,1]
     # R: immediate reward array, shape (S, A), R[s,a]
     # state_idx: mapping from (r,c) to state index s
     # action_idx: mapping from action name to index a
@@ -32,17 +36,17 @@ if __name__ == "__main__":
     start_time = time.time()
     P, R, state_idx, action_idx, terminal_states, shared, tpi_extra, cfg = prepare_truncated_policy_iteration()
 
-    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 å­˜stateValue
-    # q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 å­˜q_pi(s,a) 
-    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 è®°å½•ä¸‹æ—§çš„åŠ¨ä½œ             
+    v_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=float)                          # v_table 5 * 5 ´æstateValue
+    # q_table = np.zeros((cfg.maze.height * cfg.maze.width, len(action_idx)), dtype=float)        # q_table 25 * 5 ´æq_pi(s,a) 
+    a_table = np.zeros((cfg.maze.height, cfg.maze.width), dtype=int)                            # a_table 5 * 5 ¼ÇÂ¼ÏÂ¾ÉµÄ¶¯×÷             
 
-    # åˆ¶å®šä¸€ä¸ªåˆå§‹ç­–ç•¥ï¼Œæ‰€æœ‰çŠ¶æ€é‡‡ç”¨åŠ¨ä½œstay
+    # ÖÆ¶¨Ò»¸ö³õÊ¼²ßÂÔ£¬ËùÓĞ×´Ì¬²ÉÓÃ¶¯×÷stay
     for coord, s in state_idx.items():
         r, c = coord[0], coord[1]
         v_table[r, c] = R[s, action_idx["stay"]] + shared.gamma * v_table[r, c]
         a_table[r, c] = action_idx["stay"]
     
-    # é’ˆå¯¹åˆå§‹ç­–ç•¥å¼€å§‹è¿­ä»£
+    # Õë¶Ô³õÊ¼²ßÂÔ¿ªÊ¼µü´ú
     outer_iteration_count = 0
     while True:
         outer_iteration_count += 1

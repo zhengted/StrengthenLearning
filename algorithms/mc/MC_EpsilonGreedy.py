@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+import os, sys
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 from math import gamma
 from typing import Tuple
 
 import numpy as np
 
-from config import load_config, build_maze_mdp_arrays
-from maze_utils import ACTION_DELTAS_DEFAULT, clamp
+from core.config import load_config, build_maze_mdp_arrays
+from core.maze_utils import ACTION_DELTAS_DEFAULT, clamp
 import os
 
 
@@ -22,7 +26,9 @@ def action_to_idx(name: str) -> int:
     except ValueError:
         raise ValueError(f"unknown action {name}")
 
-def idx_to_delta(idx: int) -> tuple[int, int]:
+from typing import Tuple
+
+def idx_to_delta(idx: int) -> Tuple[int, int]:
     return ACTION_DELTAS_DEFAULT[idx_to_action(idx)]
 
 def prepare_MC_ExploringStart_iteration(cfg_path: str = "config.json") -> Tuple:
@@ -175,11 +181,11 @@ if __name__ == "__main__":
 
     # Format and print the final MC_ExploringStart (a_table)
     action_symbols = {
-        action_idx["up"]: "↑",
-        action_idx["down"]: "↓",
-        action_idx["left"]: "←",
-        action_idx["right"]: "→",
-        action_idx["stay"]: "・",
+        action_idx["up"]: "\u2191",
+        action_idx["down"]: "\u2193",
+        action_idx["left"]: "\u2190",
+        action_idx["right"]: "\u2192",
+        action_idx["stay"]: ".",
     }
     MC_ExploringStart_formatted = [[action_symbols.get(a, "?") for a in row] for row in a_table]
     print("\nFinal MC_ExploringStart (Action Table):")
